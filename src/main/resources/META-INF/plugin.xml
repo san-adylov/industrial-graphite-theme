@@ -1,0 +1,48 @@
+<idea-plugin>
+    <id>dev.industrial.graphite</id>
+    <name>Industrial Graphite</name>
+    <version>1.5.1</version>
+    <vendor>Industrial Graphite</vendor>
+
+    <description><![CDATA[
+    <p>Industrial Graphite — warm graphite dark theme for Java &amp; Spring.
+    90% calm flat graphite, 10% signal amber, copper and status lamps.</p>
+    <ul>
+      <li>UI theme for the New UI and a matching editor color scheme (Java, XML, YAML, SQL, Spring Boot console logs).</li>
+      <li>Industrial icon set: class, abstract class, interface, enum, record, annotation, exception, test class,
+          Java / XML / YAML / PostgreSQL file icons, private / static / final markers.</li>
+      <li>Resource icons: source / test / resources / test resources / excluded roots, modules, packages, static, templates, db/migration, i18n, config folders; properties, Spring profiles, JSON, HTML, CSS, JS, images, .env, Flyway migrations, logback, text.</li>
+      <li>Spring-aware: @Configuration / @SpringBootApplication get the Spring icon,
+          Spring beans (@Component, @Service, @Repository, @Controller, Spring Data repositories) get a bean badge.</li>
+      <li>System icons: run / debug / build actions, debugger steps, breakpoints, VCS, Maven, database nodes, Markdown,
+          tool window icons (20 px and compact 16 px).</li>
+      <li>Spring Boot config files: application / bootstrap, dev / test / prod profiles (YAML and properties).</li>
+      <li>Spring Modulith: application / open / shared modules, exposed / internal packages and named interfaces in the project tree;
+          module gutter, tool window and action icons.</li>
+      <li>Gutter icons: run / tests, inheritance, recursion, lambdas, bookmarks, breakpoints, execution point;
+          Spring, JPA and Database gutter and node icons in IntelliJ IDEA Ultimate.</li>
+      <li>IBM Plex Mono bundled (SIL OFL 1.1) and applied once as the UI and editor font.</li>
+    </ul>
+    ]]></description>
+
+    <idea-version since-build="233"/>
+
+    <depends>com.intellij.modules.platform</depends>
+    <depends optional="true" config-file="industrial-java.xml">com.intellij.java</depends>
+
+    <applicationListeners>
+        <listener class="dev.industrial.graphite.IndustrialFontInstaller" topic="com.intellij.ide.AppLifecycleListener"/>
+        <listener class="dev.industrial.graphite.IndustrialStartup" topic="com.intellij.ide.AppLifecycleListener"/>
+    </applicationListeners>
+    <projectListeners>
+        <listener class="dev.industrial.graphite.IndustrialToolWindowListener"
+                  topic="com.intellij.openapi.wm.ex.ToolWindowManagerListener"/>
+    </projectListeners>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <themeProvider id="dev.industrial.graphite.dark" path="/themes/IndustrialGraphite.theme.json"/>
+        <fileIconProvider implementation="dev.industrial.graphite.IndustrialFileIconProvider" order="first"/>
+        <!-- После всех провайдеров: перекрывает иконки конфигов от Spring Boot (Ultimate) -->
+        <fileIconPatcher implementation="dev.industrial.graphite.IndustrialFileIconPatcher" order="last"/>
+    </extensions>
+</idea-plugin>
