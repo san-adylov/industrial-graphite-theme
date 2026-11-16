@@ -4,6 +4,8 @@ import com.intellij.ide.AppLifecycleListener;
 import com.intellij.ide.ui.LafManager;
 import com.intellij.ide.ui.UISettings;
 import com.intellij.ide.util.PropertiesComponent;
+import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.application.ModalityState;
 import com.intellij.openapi.editor.colors.FontPreferences;
 import com.intellij.openapi.editor.colors.ModifiableFontPreferences;
 import com.intellij.openapi.editor.colors.impl.AppEditorFontOptions;
@@ -29,15 +31,19 @@ public final class IndustrialFontInstaller implements AppLifecycleListener {
     @Override
     public void appFrameCreated(@NotNull List<String> commandLineArgs) {
         registerFonts();
-        try {
-            PropertiesComponent props = PropertiesComponent.getInstance();
-            if (props.getBoolean(APPLIED_KEY)) return;
-            applyUiFont();
-            applyEditorFont();
-            props.setValue(APPLIED_KEY, true);
-        } catch (LinkageError ignored) {
-            // несовместимая версия API — шрифт можно выбрать вручную в Settings
-        }
+        PropertiesComponent props = PropertiesComponent.getInstance();
+        if (props.getBoolean(APPLIED_KEY)) return;
+        // appFrameCreated вызывается из фоновой корутины, а UISettings/LafManager — только на EDT.
+        ApplicationManager.getApplication().invokeLater(() -> {
+            try {
+                if (props.getBoolean(APPLIED_KEY)) return;
+                applyUiFont();
+                applyEditorFont();
+                props.setValue(APPLIED_KEY, true);
+            } catch (LinkageError ignored) {
+                // несовместимая версия API — шрифт можно выбрать вручную в Settings
+            }
+        }, ModalityState.nonModal());
     }
 
     /** Регистрируем шрифт в Java при каждом запуске, чтобы он был доступен, даже если не установлен в системе. */
