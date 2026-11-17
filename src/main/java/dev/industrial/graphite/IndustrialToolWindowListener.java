@@ -1,5 +1,9 @@
 package dev.industrial.graphite;
 
+import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.application.ModalityState;
+import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.openapi.wm.ex.ToolWindowManagerListener;
@@ -14,23 +18,40 @@ import java.util.List;
  * Остальные панели подменяются темой по точным путям.
  */
 public final class IndustrialToolWindowListener implements ToolWindowManagerListener {
+    private static final Logger LOG = Logger.getInstance(IndustrialToolWindowListener.class);
+
+    private final Project project;
+
+    public IndustrialToolWindowListener(@NotNull Project project) {
+        this.project = project;
+    }
+
     @Override
     public void toolWindowsRegistered(@NotNull List<String> ids, @NotNull ToolWindowManager manager) {
         if (ids.stream().noneMatch(id -> iconFor(id) != null)) return;
-        // Событие приходит из фоновой корутины; setIcon можно вызывать только на EDT,
-        // и только когда кнопки панелей уже созданы, иначе иконка масштабируется в 0x0.
-        manager.invokeLater(() -> {
+        // Не manager.invokeLater: он выполняет код внутри корутины, которая строит окно IDE,
+        // и любое исключение там обрывает инициализацию UI (пропадают виджеты тулбара).
+        // Обычный invokeLater срабатывает на EDT уже после того, как окно собрано.
+        ApplicationManager.getApplication().invokeLater(
+                () -> applyIcons(ids, manager), ModalityState.nonModal(), project.getDisposed());
+    }
+
+    private static void applyIcons(List<String> ids, ToolWindowManager manager) {
+        for (String id : ids) {
+            Icon icon = iconFor(id);
+            if (icon == null) continue;
             try {
-                for (String id : ids) {
-                    Icon icon = iconFor(id);
-                    if (icon == null) continue;
-                    ToolWindow window = manager.getToolWindow(id);
-                    if (window != null && !window.isDisposed()) window.setIcon(icon);
-                }
-            } catch (LinkageError ignored) {
-                // несовместимая версия API — оставляем стандартные иконки
+                ToolWindow window = manager.getToolWindow(id);
+                if (window == null || window.isDisposed()) continue;
+                // Сначала грузим иконку сами: если она не рендерится (размер 0x0),
+                // не трогаем кнопку панели и оставляем стандартную иконку.
+                if (icon.getIconWidth() <= 0 || icon.getIconHeight() <= 0) continue;
+                window.setIcon(icon);
+            } catch (RuntimeException | LinkageError e) {
+                // Иконка — косметика: сбой здесь не должен ломать IDE
+                LOG.info("Industrial Graphite: cannot set icon for tool window " + id + ": " + e);
             }
-        });
+        }
     }
 
     private static Icon iconFor(String id) {

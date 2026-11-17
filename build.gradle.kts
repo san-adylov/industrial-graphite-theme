@@ -20,6 +20,9 @@ dependencies {
 
 java { toolchain { languageVersion = JavaLanguageVersion.of(17) } }
 
+// Исходники в UTF-8 (русские комментарии); без этого javac на Windows читает их как windows-1251
+tasks.withType<JavaCompile>().configureEach { options.encoding = "UTF-8" }
+
 intellijPlatform {
     pluginConfiguration {
         version = project.version.toString()
@@ -28,6 +31,12 @@ intellijPlatform {
             untilBuild = provider { null }
         }
         changeNotes = """
+            <p><b>1.5.3</b></p>
+            <ul>
+              <li>Fixed: Database / Endpoints tool window icons are applied after the IDE frame is fully built;
+                  a failing icon can no longer interrupt UI initialization (fixes missing toolbar widgets and
+                  "Width (0) and height (0)" on IntelliJ IDEA 2025.3).</li>
+            </ul>
             <p><b>1.5.2</b></p>
             <ul>
               <li>Fixed: tool window icons (Database, Endpoints) are now set on the EDT — no more
