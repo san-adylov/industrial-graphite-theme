@@ -31,6 +31,23 @@ intellijPlatform {
             untilBuild = provider { null }
         }
         changeNotes = """
+            <p><b>1.5.6</b></p>
+            <ul>
+              <li>The plugin no longer bundles or applies IBM Plex Mono and never changes your fonts;
+                  the font is now only recommended in the description.</li>
+            </ul>
+            <p><b>1.5.5</b></p>
+            <ul>
+              <li>Installing the plugin no longer changes IDE fonts: IBM Plex Mono is applied as the UI and editor
+                  font only once you switch to the Industrial Graphite theme. Fixes toolbar widgets
+                  (e.g. the trial widget) disappearing after installation.</li>
+            </ul>
+            <p><b>1.5.4</b></p>
+            <ul>
+              <li>Database / Endpoints tool window icons are now replaced by icon path through the theme
+                  instead of ToolWindow.setIcon; removes "Width (0) and height (0)" on IntelliJ IDEA 2025.3
+                  and keeps all main toolbar widgets in place.</li>
+            </ul>
             <p><b>1.5.3</b></p>
             <ul>
               <li>Fixed: Database / Endpoints tool window icons are applied after the IDE frame is fully built;

@@ -52,9 +52,9 @@
     Тем же способом подменяются узлы БД: data source, PK, FK, index, view, sequence, trigger, function, connect / disconnect, execute.
     Если какая-то иконка gutter этих плагинов не распозналась, в `idea.log` будет строка
     `Industrial Graphite: gutter icon without mapping: <плагин> <путь>` — по ней правило легко дописать в `PluginIconRules`.
-- **Шрифт IBM Plex Mono** (SIL OFL 1.1, `src/main/resources/fonts/`): регистрируется при запуске и один раз ставится
-  шрифтом интерфейса и редактора (размер остаётся твой). Схема редактора тоже указывает IBM Plex Mono.
-  Если потом сменишь шрифт в Settings — плагин его не перетрёт.
+- **Рекомендуемый шрифт — [IBM Plex Mono](https://github.com/IBM/plex).** Плагин его не содержит и шрифты не меняет:
+  установи шрифт и выбери его в *Settings → Appearance & Behavior → Appearance* (шрифт интерфейса)
+  и *Settings → Editor → Font*.
 
 ## Установка
 Settings → Plugins → ⚙ → **Install Plugin from Disk…** → `industrial-graphite-theme-1.0.0.zip` → перезапуск.

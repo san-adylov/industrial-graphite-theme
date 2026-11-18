@@ -20,8 +20,10 @@
           module gutter, tool window and action icons.</li>
       <li>Gutter icons: run / tests, inheritance, recursion, lambdas, bookmarks, breakpoints, execution point;
           Spring, JPA and Database gutter and node icons in IntelliJ IDEA Ultimate.</li>
-      <li>IBM Plex Mono bundled (SIL OFL 1.1) and applied once as the UI and editor font.</li>
     </ul>
+    <p><b>Recommended font:</b> the theme is designed for
+    <a href="https://github.com/IBM/plex">IBM Plex Mono</a>. Install it and select it in
+    <i>Settings | Appearance &amp; Behavior | Appearance</i> (UI font) and <i>Settings | Editor | Font</i>.</p>
     ]]></description>
 
     <idea-version since-build="233"/>
@@ -30,13 +32,8 @@
     <depends optional="true" config-file="industrial-java.xml">com.intellij.java</depends>
 
     <applicationListeners>
-        <listener class="dev.industrial.graphite.IndustrialFontInstaller" topic="com.intellij.ide.AppLifecycleListener"/>
         <listener class="dev.industrial.graphite.IndustrialStartup" topic="com.intellij.ide.AppLifecycleListener"/>
     </applicationListeners>
-    <projectListeners>
-        <listener class="dev.industrial.graphite.IndustrialToolWindowListener"
-                  topic="com.intellij.openapi.wm.ex.ToolWindowManagerListener"/>
-    </projectListeners>
 
     <extensions defaultExtensionNs="com.intellij">
         <themeProvider id="dev.industrial.graphite.dark" path="/themes/IndustrialGraphite.theme.json"/>

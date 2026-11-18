@@ -193,10 +193,6 @@ A = {
 out = ['<scheme name="Industrial Graphite" version="142" parent_scheme="Darcula">',
        '  <metaInfo><property name="ide">idea</property></metaInfo>',
        '  <option name="LINE_SPACING" value="1.2"/>',
-       '  <option name="EDITOR_FONT_SIZE" value="13"/>',
-       '  <option name="EDITOR_FONT_NAME" value="IBM Plex Mono"/>',
-       '  <option name="CONSOLE_FONT_NAME" value="IBM Plex Mono"/>',
-       '  <option name="CONSOLE_FONT_SIZE" value="12"/>',
        '  <option name="CONSOLE_LINE_SPACING" value="1.2"/>',
        '  <colors>']
 out += [f'    <option name="{k}" value="{v}"/>' for k, v in colors.items()]

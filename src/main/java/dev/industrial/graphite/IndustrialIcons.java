@@ -64,9 +64,6 @@ public final class IndustrialIcons {
     // --- Системные ---
     public static final Icon MD = loadSys("md");
     public static final Icon README = loadSys("readme");
-    /** Панели из закрытых плагинов Ultimate — ставим через API; рядом лежат версии @20x20. */
-    public static final Icon TOOL_WINDOW_DATABASE = loadSys("toolWindowDatabase");
-    public static final Icon TOOL_WINDOW_ENDPOINTS = loadSys("toolWindowEndpoints");
 
     // --- Конфиги Spring Boot ---
     public static final Icon SPRING_APP_YAML = loadSpring("springApplicationYaml");
